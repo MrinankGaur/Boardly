@@ -3,6 +3,7 @@
 import Image from "next/image";
 import { useOrganization, useOrganizationList } from "@clerk/nextjs";
 import { cn } from "@/lib/utils";
+import { Hint } from "../hint";
 
 interface ItemProps{
     id: string,
@@ -26,7 +27,13 @@ export const Item = ({
     };
     return (
         <div className="aspect-sqaure relative">
-            <Image
+            <Hint 
+                label={name}
+                side = "right"
+                align = "start"
+                sideOffset={18}
+            >
+                <Image
                 src={imageUrl}
                 alt={name}
                 onClick={onClick}
@@ -37,6 +44,7 @@ export const Item = ({
                     isActive && "opacity-100"
                 )}
             />
+            </Hint>
         </div>
     )
 }
