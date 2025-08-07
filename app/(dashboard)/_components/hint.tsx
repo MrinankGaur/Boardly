@@ -25,7 +25,7 @@ export const Hint = ({
     return(
         <TooltipProvider>
             <Tooltip delayDuration={100}>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                     {children}
                 </TooltipTrigger>
                 <TooltipContent

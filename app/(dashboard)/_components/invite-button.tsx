@@ -20,8 +20,8 @@ export const InviteButton = () => {
                     Invite Members
                 </Button>
             </DialogTrigger>
-            <DialogContent className="p-0 w-[880px] bg-transparent border-none">
-                <OrganizationProfile/>
+            <DialogContent className="p-0 w-[880px] bg-transparent border-none ">
+                <OrganizationProfile routing="hash"/>
             </DialogContent>
         </Dialog>
     );
