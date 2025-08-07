@@ -1,74 +1,62 @@
-// "use client";
-
-// import Image from "next/image";
-// import { EmptySearch } from "./empty-search";
-// import { EmptyFavorites } from "./empty-favorites";
-// import { EmptyBoards } from "./empty-boards";
-
-
-// interface BoardListProps{
-//     orgId: string;
-//     query: {
-//        search?:string;
-//        favorites?: string; 
-//     }
-// }
-
-// export const BoardList = ({
-//     orgId,
-//     query
-// }:BoardListProps) => {
-
-//     const data = []; // TODO: change to api call
-
-//     if(!data?.length && query.search){
-//         return <EmptySearch/>
-//     }
-
-//     if(!data?.length && query.favorites){
-//         return <EmptyFavorites/>
-//     }
-//     if(!data?.length){
-//         return  <EmptyBoards/>
-//     }
-
-
-//     return (
-//         <div>
-//             {JSON.stringify(query)}
-//         </div>
-//     )
-// }
 "use client";
 
-import { useSearchParams } from "next/navigation";
+import { api } from "@/convex/_generated/api";
 import { EmptySearch } from "./empty-search";
 import { EmptyFavorites } from "./empty-favorites";
 import { EmptyBoards } from "./empty-boards";
+import { useQuery } from "convex/react";
+import { BoardCard } from "./board-card";
 
-interface BoardListProps {
-  orgId: string;
+
+interface BoardListProps{
+    orgId: string;
+    query: {
+       search?:string;
+       favorites?: string; 
+    }
 }
 
-export const BoardList = ({ orgId }: BoardListProps) => {
-  const searchParams = useSearchParams();
+export const BoardList = ({
+    orgId,
+    query
+}:BoardListProps) => {
 
-  const search = searchParams.get("search") || undefined;
-  const favorites = searchParams.get("favorite") || searchParams.get("favorites") || undefined;
+    const data = useQuery(api.boards.get, {orgId}); // TODO: change to api call
 
-  const data = []; // TODO: replace with real API call
+    if(!data?.length && query.search){
+        return <EmptySearch/>
+    }
 
-  if (!data?.length && search) {
-    return <EmptySearch />;
-  }
+    if(!data?.length && query.favorites){
+        return <EmptyFavorites/>
+    }
+    if(!data?.length){
+        return  <EmptyBoards/>
+    }
 
-  if (!data?.length && favorites) {
-    return <EmptyFavorites />;
-  }
 
-  if (!data?.length) {
-    return <EmptyBoards />;
-  }
-
-  return <div>{JSON.stringify({ search, favorites })}</div>;
-};
+    return (
+        <div>
+          <h2 className="text-3xl">
+            {query.favorites? "Favorite Board": "Team Board"}
+          </h2>
+          <div 
+            className="grid grid-c1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-5 mt-8 pb-10"
+          >
+            {data?.map((board)=>(
+              <BoardCard
+                key={board._id}
+                id={board._id}
+                title={board.title}
+                imageUrl = {board.imageUrl}
+                authorId = {board.authorId}
+                authorName = {board.authorName}
+                createdAt = {board._creationTime}
+                orgId = {board.orgId}
+                isFavorite = {false}
+              />
+            ))}
+          </div>
+        </div>
+    )
+}

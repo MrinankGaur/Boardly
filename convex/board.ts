@@ -1,5 +1,5 @@
-import {v} from "convex/values";
-import {mutation} from "./_generated/server"
+import { v } from "convex/values";
+import {mutation} from "./_generated/server";
 
 const images = [
     "/placeholders/1.svg",
@@ -19,7 +19,7 @@ export const create = mutation({
         orgId: v.string(),
         title: v.string(),
     },
-    handler: async (ctx, args)=>{
+    handler: async (ctx,args) => {
         const identity = await ctx.auth.getUserIdentity();
 
         if(!identity){
@@ -28,15 +28,15 @@ export const create = mutation({
 
         const randomImage = images[Math.floor(Math.random()*images.length)];
 
-        const board = await ctx.db.insert("board", {
+        const board = await ctx.db.insert("boards", {
             title: args.title,
             orgId: args.orgId,
-            authodId: identity.subject,
+            authorId: identity.subject,
             authorName: identity.name!,
             imageUrl: randomImage,
-
         });
-
         return board;
-    }
-})
+
+    },
+    
+});
