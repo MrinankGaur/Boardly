@@ -40,3 +40,18 @@ export const create = mutation({
     },
     
 });
+
+export const remove = mutation({
+    args:{
+        id: v.id("boards")
+    },
+    handler: async (ctx, args) => {
+        const identity = await ctx.auth.getUserIdentity();
+
+        if(!identity){
+            throw new Error("Unauthorized");
+        }
+        // TODO: later check to delete favorite relation as well
+        await ctx.db.delete(args.id);
+    },
+});
