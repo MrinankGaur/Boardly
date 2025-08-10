@@ -121,11 +121,10 @@ export const favorite = mutation({
 
         const existingFavorite = await ctx.db
         .query("useFavorites")
-        .withIndex("by_user_board_org", (q)=>
+        .withIndex("by_user_board", (q)=>
             q   
                 .eq("userId",userId)
                 .eq("boardId",board._id)
-                .eq("orgId",args.orgId)
         )
         .unique();
 
@@ -169,7 +168,6 @@ export const unfavorite = mutation({
             q   
                 .eq("userId",userId)
                 .eq("boardId",board._id) 
-                // TODO: check if orgId needed
         )
         .unique();
 
