@@ -18,7 +18,8 @@ export default defineSchema({
     useFavorites: defineTable({
         orgId: v.string(),
         userId: v.string(),
-        boardId: v.string(),
+        boardId: v.id("boards"),
+        //boardId: v.string(), //if silent errors show
     })
         .index("by_board",["boardId"])
         .index("by_user_org",["userId","orgId"])
