@@ -25,6 +25,7 @@ import { on } from "events";
 import { LiveObject } from "@liveblocks/client";
 import { set } from "date-fns";
 import { Pointer } from "lucide-react";
+import { LayerPreview } from "./layer-preview";
 
 
 const MAX_LAYERS = 100;
@@ -159,6 +160,14 @@ export const Canvas = ({
                     transform: `translate(${camera.x}px, ${camera.y}px)`,
                 }}
             >
+                {layerIds.map((layerId) => (
+                    <LayerPreview
+                        key={layerId}
+                        id={layerId}
+                        onLayerPointerDown={()=>{}}
+                        selectionColor = "#000"
+                    />
+                ))}
                 <CursorsPresence/>
             </g>
             </svg>
