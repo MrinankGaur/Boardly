@@ -27,6 +27,7 @@ import { LiveObject } from "@liveblocks/client";
 import { set } from "date-fns";
 import { Pointer } from "lucide-react";
 import { LayerPreview } from "./layer-preview";
+import { SelectionBox } from "./selection-box";
 
 
 const MAX_LAYERS = 100;
@@ -217,6 +218,9 @@ export const Canvas = ({
                         selectionColor = {layerIdstoColorSelection[layerId]}
                     />
                 ))}
+                <SelectionBox
+                    onResizeHandlePointerDown={()=>{}}
+                />
                 <CursorsPresence/>
             </g>
             </svg>
