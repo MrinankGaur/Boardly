@@ -10,7 +10,7 @@ import {
     Side,
     XYWH
 } from "@/types/canvas";
-import { useCallback, useMemo, useState } from "react";
+import { use, useCallback, useMemo, useState } from "react";
 import { Info } from "./info";
 import { Participants } from "./participants";
 import { Toolbar } from "./toolbar";
@@ -61,6 +61,35 @@ export const Canvas = ({
     const history = useHistory();
     const canUndo = useCanUndo();
     const canRedo = useCanRedo();
+
+    const traslateSelectedLayers = useMutation((
+        {storage, self},
+        point: Point
+    )=>{
+        if(canvasState.mode !== CanvasMode.Translating){
+            return;
+        }
+
+        const offset = {
+            x: point.x - canvasState.current.x,
+            y: point.y - canvasState.current.y,
+        };
+
+        const liveLayers = storage.get("layers");
+        for(const layerId of self.presence.selection){
+            const layer = liveLayers.get(layerId);
+            if(layer){
+                layer.update({
+                    x: layer.get("x") + offset.x,
+                    y: layer.get("y") + offset.y,
+                });
+            }
+        }
+
+        setCanvasState({mode: CanvasMode.Translating, current: point});
+    },[
+        canvasState,
+    ]);
 
     const resizeSelectedLayer = useMutation((
         {storage, self},
@@ -144,15 +173,19 @@ export const Canvas = ({
 
         const current = PointerEventToCanvasPoint(e, camera);
 
-        if(canvasState.mode === CanvasMode.Resizing){
+        if(canvasState.mode === CanvasMode.Translating){
+            traslateSelectedLayers(current);
+        }else if(canvasState.mode === CanvasMode.Resizing){
             resizeSelectedLayer(current);
         }
+       
 
         setMyPresence({cursor:current});
     }, [
         camera,
         canvasState,
         resizeSelectedLayer,
+        traslateSelectedLayers,
     ]);
 
     const onPointerLeave = useMutation((
