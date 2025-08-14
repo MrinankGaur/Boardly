@@ -114,6 +114,14 @@ export const Canvas = ({
 
     },[canvasState])
 
+    const unselectLayer = useMutation((
+        {self, setMyPresence}
+    )=>{
+        if(self.presence.selection.length>0){
+            setMyPresence({selection: []},{addToHistory: true});
+        }
+    },[])
+
     const onResizeHandlePointerDown = useCallback((
         corner: Side,
         initialBounds: XYWH,
@@ -194,15 +202,41 @@ export const Canvas = ({
         setMyPresence({cursor: null});
     },[]);
 
+    const onPointerDown = useCallback((
+        e: React.PointerEvent
+    )=>{
+        const point = PointerEventToCanvasPoint(e, camera);
+
+        if(canvasState.mode===CanvasMode.Inserting){
+            return;
+        }
+
+        //TODO: Add case for drawing
+
+        setCanvasState({origin: point, mode: CanvasMode.Pressing});
+    },[
+        camera,
+        canvasState.mode,
+        setCanvasState,
+    ])
+
     const onPointerUp = useMutation((
         {},
         e
     ) => {
         const point = PointerEventToCanvasPoint(e, camera);
 
-        if(canvasState.mode === CanvasMode.Inserting){
+        if(
+            canvasState.mode === CanvasMode.None || 
+            canvasState.mode === CanvasMode.Pressing
+        ){
+            unselectLayer();
+            setCanvasState({
+                mode:  CanvasMode.None
+            });
+        }else if (canvasState.mode === CanvasMode.Inserting){
             insertLayer(canvasState.layerType, point);
-        }else{
+        }else {
             setCanvasState({
                 mode: CanvasMode.None
             });
@@ -215,6 +249,7 @@ export const Canvas = ({
         canvasState,
         history,
         insertLayer,
+        unselectLayer,
     ]);
 
     const selections = useOthersMapped((other)=> other.presence.selection);
@@ -284,6 +319,7 @@ export const Canvas = ({
              onPointerMove={onPointerMove}
              onPointerLeave={onPointerLeave}
              onPointerUp={onPointerUp}
+             onPointerDown={onPointerDown}
             >
             <g
                 style={{
