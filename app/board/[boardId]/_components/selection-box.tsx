@@ -155,7 +155,7 @@ export const SelectionBox = memo(({
                         x={0}
                         y={0}
                         style={{
-                            cursor: "sn-resize",
+                            cursor: "ns-resize",
                             width: HANDLE_WIDTH,
                             height: HANDLE_WIDTH,
                             transform: `
@@ -175,7 +175,7 @@ export const SelectionBox = memo(({
                         x={0}
                         y={0}
                         style={{
-                            cursor: "swne-resize",
+                            cursor: "nesw-resize",
                             width: HANDLE_WIDTH,
                             height: HANDLE_WIDTH,
                             transform: `

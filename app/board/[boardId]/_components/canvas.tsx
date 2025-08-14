@@ -6,7 +6,9 @@ import {
     CanvasState, 
     Color,
     LayerType,
-    Point
+    Point,
+    Side,
+    XYWH
 } from "@/types/canvas";
 import { useCallback, useMemo, useState } from "react";
 import { Info } from "./info";
@@ -59,6 +61,20 @@ export const Canvas = ({
     const history = useHistory();
     const canUndo = useCanUndo();
     const canRedo = useCanRedo();
+
+    const onResizeHandlePointerBack = useCallback((
+        corner: Side,
+        initialBounds: XYWH,
+    )=>{
+        history.pause();
+        setCanvasState({
+            mode: CanvasMode.Resizing,
+            corner,
+            initialBounds,
+        })
+
+    },[]);
+
 
     const insertLayer = useMutation((
         {storage, setMyPresence},
