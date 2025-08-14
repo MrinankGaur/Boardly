@@ -50,6 +50,7 @@ export function resizeBounds(
     width: bounds.width,
     height: bounds.height
   };
+
   if((corner & Side.Left)===Side.Left){
     result.x = Math.min(point.x, bounds.x + bounds.width);
     result.width = Math.abs(bounds.x + bounds.width - point.x);
