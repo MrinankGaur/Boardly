@@ -23,7 +23,7 @@ import {
     useOthersMapped, 
 } from "@/liveblocks.config";
 import { CursorsPresence } from "./cursors-presence";
-import { connectionIdToColor, PointerEventToCanvasPoint } from "@/lib/utils";
+import { connectionIdToColor, PointerEventToCanvasPoint, resizeBounds } from "@/lib/utils";
 import { on } from "events";
 import { LiveObject } from "@liveblocks/client";
 import { set } from "date-fns";
@@ -62,15 +62,38 @@ export const Canvas = ({
     const canUndo = useCanUndo();
     const canRedo = useCanRedo();
 
-    const onResizeHandlePointerBack = useCallback((
+    const resizeSelectedLayer = useMutation((
+        {storage, self},
+        point: Point,
+    )=>{
+        if(canvasState.mode!==CanvasMode.Resizing){
+            return;
+        }
+
+        const bounds = resizeBounds(
+            canvasState.initialBounds,
+            canvasState.corner,
+            point,
+        );
+
+        const liveLayers = storage.get("layers");
+        const layer = liveLayers.get(self.presence.selection[0]);
+        
+        if(layer){
+            layer.update(bounds);
+        };
+
+    },[canvasState])
+
+    const onResizeHandlePointerDown = useCallback((
         corner: Side,
         initialBounds: XYWH,
     )=>{
         history.pause();
         setCanvasState({
             mode: CanvasMode.Resizing,
-            corner,
             initialBounds,
+            corner,
         })
 
     },[]);
@@ -121,8 +144,16 @@ export const Canvas = ({
 
         const current = PointerEventToCanvasPoint(e, camera);
 
+        if(canvasState.mode === CanvasMode.Resizing){
+            resizeSelectedLayer(current);
+        }
+
         setMyPresence({cursor:current});
-    }, []);
+    }, [
+        camera,
+        canvasState,
+        resizeSelectedLayer,
+    ]);
 
     const onPointerLeave = useMutation((
         {setMyPresence}
@@ -235,7 +266,7 @@ export const Canvas = ({
                     />
                 ))}
                 <SelectionBox
-                    onResizeHandlePointerDown={()=>{}}
+                    onResizeHandlePointerDown={onResizeHandlePointerDown}
                 />
                 <CursorsPresence/>
             </g>
