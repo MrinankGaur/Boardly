@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "postinstall": "npm rebuild lightningcss --update-binary && node ./node_modules/@tailwindcss/oxide/install.js",
+    "postinstall": "npm rebuild lightningcss --update-binary",
     "vercel-build": "next build && npx convex deploy"
   },
   "dependencies": {
