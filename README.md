@@ -2,6 +2,8 @@
 
 Boardly is a real-time collaborative whiteboard application that allows users to create, share, and collaborate on digital whiteboards in real-time.
 
+🌐 **Live Demo:** [boardly24.vercel.app](https://boardly24.vercel.app)
+
 ## 🚀 Features
 
 - Real-time collaboration
@@ -24,6 +26,9 @@ Boardly is a real-time collaborative whiteboard application that allows users to
 - **Backend**
   - Convex (Real-time Database)
   - Clerk (Authentication)
+
+- **Deployment**
+  - Vercel (Frontend)
 
 ## 🛠️ Installation
 
