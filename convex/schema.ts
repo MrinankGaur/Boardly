@@ -11,7 +11,7 @@ export default defineSchema({
         imageUrl: v.string(),
     })
         .index("by_org",["orgId"])
-        .searchIndex("seach_title", {
+        .searchIndex("search_title", {
             searchField: "title",
             filterFields: ["orgId"]
         }),

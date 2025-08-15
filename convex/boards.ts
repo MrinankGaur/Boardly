@@ -28,7 +28,14 @@ export const get = query({
                 .order("desc")
                 .collect()
             const ids = favoritedBoards.map((b) => b.boardId);
-            const boards = await getAllOrThrow(ctx.db, ids);
+            let boards = await getAllOrThrow(ctx.db, ids);
+
+            // Apply search filter to favorite boards if search term is provided
+            if(args.search){
+                boards = boards.filter(board => 
+                    board.title.toLowerCase().includes(args.search!.toLowerCase())
+                );
+            }
 
             return boards.map((board)=>({
                 ...board,
@@ -44,7 +51,7 @@ export const get = query({
         if(title){
             boards = await ctx.db
                         .query("boards")
-                        .withSearchIndex("seach_title",(q)=>
+                        .withSearchIndex("search_title",(q)=>
                             q
                                 .search("title",title)
                                 .eq("orgId",args.orgId)
@@ -80,7 +87,7 @@ export const get = query({
                 });
         });
 
-        const boardsWithFavoriteBoolean = Promise.all(boardsWithFavoriteRelation);
+        const boardsWithFavoriteBoolean = await Promise.all(boardsWithFavoriteRelation);
 
         return boardsWithFavoriteBoolean;
     },

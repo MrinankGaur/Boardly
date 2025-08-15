@@ -13,7 +13,7 @@ export const EmptySearch = () => {
                 No Results Found!
             </h2>
             <p className="text-muted-foreground text-sm mt-2">
-                Try searching for somthing else
+                Try searching for something else
             </p>
         </div>
     )

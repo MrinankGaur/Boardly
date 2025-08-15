@@ -77,7 +77,7 @@ export const OrgSideBar = () => {
                         query: {favorites: true}
                     }}>
                         <Star className="h-4 w-4 mr-2"/>
-                        Favourite Boards
+                        Favorite Boards
                     </Link>
                 </Button>
             </div>

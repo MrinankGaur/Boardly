@@ -50,7 +50,7 @@ export const BoardCard = ({
     const toggleFavorite = () => {
         if(isFavorite){
             onUnfavorite({ id })
-                .catch(()=> toast.error("Failed to Uunfavorite"));
+                .catch(()=> toast.error("Failed to unfavorite"));
         }else{
             onFavorite({ id,orgId })
                 .catch(() => toast.error("Failed to favorite"));
@@ -66,7 +66,7 @@ export const BoardCard = ({
                         src={imageUrl}
                         alt={title}
                         fill
-                        className="object-fit"
+                        className="object-cover"
                     />
                     <Overlay/>
                     <Actions
