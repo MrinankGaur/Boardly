@@ -1,4 +1,4 @@
-import { Plus,X } from "lucide-react";
+import { Plus } from "lucide-react";
 import { OrganizationProfile } from "@clerk/nextjs";
 
 
@@ -6,7 +6,6 @@ import{
     Dialog,
     DialogContent,
     DialogTrigger,
-    DialogClose
 } from "@/components/ui/dialog"
 
 import { Button } from "@/components/ui/button";

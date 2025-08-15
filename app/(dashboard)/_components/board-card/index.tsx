@@ -21,7 +21,7 @@ interface BoardCardProps {
     imageUrl: string;
     orgId: string;
     isFavorite: boolean;
-}''
+}
 
 
 

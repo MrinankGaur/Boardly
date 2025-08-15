@@ -10,7 +10,6 @@ import {
   Side, 
   XYWH 
 } from "@/types/canvas";
-import { error } from "console";
 
 const COLORS = [
   "#DC2626", 

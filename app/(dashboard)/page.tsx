@@ -1,36 +1,37 @@
 "use client";
+
 import { BoardList } from "./_components/board-list";
 import { EmptyOrg } from "./_components/empty-org";
 import { useOrganization } from "@clerk/nextjs";
+import { use } from "react";
 
 interface DashBoardPageProps {
-    searchParams: {
-        search?: string;
-        favorite? : string;
-    };
-};
+  searchParams: Promise<{
+    search?: string;
+    favorite?: string;
+  }>;
+}
 
+const DashboardPage = ({ searchParams }: DashBoardPageProps) => {
+  const { organization } = useOrganization();
+  const params = use(searchParams);
 
-const DashboardPage = ({
-    searchParams,
-}: DashBoardPageProps) => {
+  // ✅ Now accessing properties from unwrapped params
+  const search = params.search ?? "";
+  const favorites = params.favorite ?? "";
 
-    const {organization} = useOrganization();
-
-
-    return (
-        <div className=" flex-1 h-[calc(100%-80px)] p-6">
-           
-            {!organization ? (
-                <EmptyOrg/>
-            ) : (
-                <BoardList
-                    orgId={organization.id}
-                    query={searchParams}
-                />
-            )}
-        </div>
-    );
+  return (
+    <div className="flex-1 h-[calc(100%-80px)] p-6">
+      {!organization ? (
+        <EmptyOrg />
+      ) : (
+        <BoardList
+          orgId={organization.id}
+          query={{ search, favorites }}
+        />
+      )}
+    </div>
+  );
 };
 
 export default DashboardPage;

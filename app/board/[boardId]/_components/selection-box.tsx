@@ -11,7 +11,6 @@ import {
     Side, 
     XYWH, 
 } from "@/types/canvas";
-import { on } from "events";
 import { memo } from "react";
 
 interface SelectionBoxProps{
@@ -217,3 +216,5 @@ export const SelectionBox = memo(({
         </>
     )
 });
+
+SelectionBox.displayName = "SelectionBox";

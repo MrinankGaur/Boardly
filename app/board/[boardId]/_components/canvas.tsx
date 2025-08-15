@@ -10,11 +10,11 @@ import {
     Side,
     XYWH
 } from "@/types/canvas";
-import { 
-    use, 
+import {
     useCallback, 
     useMemo, 
-    useState
+    useState,
+    useEffect,
 } from "react";
 import { Info } from "./info";
 import { Participants } from "./participants";
@@ -37,14 +37,13 @@ import {
     PointerEventToCanvasPoint, 
     resizeBounds
 } from "@/lib/utils";
-import { on } from "events";
 import { LiveObject } from "@liveblocks/client";
-import { set } from "date-fns";
-import { Pointer } from "lucide-react";
 import { LayerPreview } from "./layer-preview";
 import { SelectionBox } from "./selection-box";
 import { SelectionTools } from "./selections-tools";
 import { Path } from "./path";
+import { useDisableScrollBounce } from "@/hooks/use-disable-scroll-bounce";
+import { useDeleteLayers } from "@/hooks/use-delete-layers";
 
 
 const MAX_LAYERS = 100;
@@ -75,6 +74,8 @@ export const Canvas = ({
         b: 255,
     });
 
+    useDisableScrollBounce();
+    
     const history = useHistory();
     const canUndo = useCanUndo();
     const canRedo = useCanRedo();
@@ -266,7 +267,7 @@ export const Canvas = ({
             corner,
         })
 
-    },[]);
+    },[history]);
 
 
     const insertLayer = useMutation((
@@ -448,6 +449,32 @@ export const Canvas = ({
         return layerIdstoColorSelection;
     },[selections])
 
+    const deleteLayer = useDeleteLayers();
+    
+    useEffect(() => {
+        function onKeyDown(e: KeyboardEvent) {
+            switch (e.key.toLowerCase()) {  // Add toLowerCase() to handle both cases
+                case "z": {
+                    if (e.ctrlKey || e.metaKey) {
+                        e.preventDefault();  // Prevent default browser behavior
+                        if (e.shiftKey) {
+                            history.redo();
+                        } else {
+                            history.undo();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        document.addEventListener("keydown", onKeyDown);
+
+        return () => {
+            document.removeEventListener("keydown", onKeyDown);
+        };
+    },[deleteLayer,history])
+
 
     return (
         <main
@@ -510,7 +537,7 @@ export const Canvas = ({
                         fill = {colorToCss(lastUsedColor)}
                         x={0}
                         y={0}
-                        
+
                     />
                 )}
             </g>

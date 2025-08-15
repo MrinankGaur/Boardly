@@ -5,7 +5,6 @@ import{
     Dialog,
     DialogContent,
     DialogTrigger,
-    DialogClose
 } from "@/components/ui/dialog"
 
 
