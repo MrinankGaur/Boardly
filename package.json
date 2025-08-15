@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint",
     "postinstall": "npm rebuild lightningcss --update-binary",
-    "vercel-build": "next build && npx convex deploy"
+    "vercel-build": "next build && npx convex deploy --prod"
   },
   "dependencies": {
     "@clerk/nextjs": "^6.28.1",

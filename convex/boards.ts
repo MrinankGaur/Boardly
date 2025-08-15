@@ -26,7 +26,7 @@ export const get = query({
                         .eq("orgId",args.orgId)
                 )
                 .order("desc")
-                .collect()
+                .collect();
             const ids = favoritedBoards.map((b) => b.boardId);
             let boards = await getAllOrThrow(ctx.db, ids);
 
