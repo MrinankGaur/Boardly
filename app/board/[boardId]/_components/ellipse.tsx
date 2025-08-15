@@ -2,7 +2,7 @@ import { colorToCss } from "@/lib/utils";
 import { EllipseLayer } from "@/types/canvas";
 
 
-interface EllipseleProps {
+interface EllipseProps {
     id: string;
     layer: EllipseLayer;
     onPointerDown: (e: React.PointerEvent, id: string) => void;
@@ -14,8 +14,8 @@ export const Ellipse = ({
     layer,
     onPointerDown,
     selectionColor
-}: EllipseleProps) => {
-    const { x, y, width, height, fill } = layer;
+}: EllipseProps) => {
+    const { fill } = layer;
 
     return (
         <ellipse
